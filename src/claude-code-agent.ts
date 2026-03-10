@@ -377,7 +377,7 @@ export class ClaudeCodeAgent extends Agent {
 
     if (options.thinking) {
       claudeOptions.thinking = options.thinking;
-    } else if (options.maxThinkingTokens > 0) {
+    } else if (options.maxThinkingTokens !== undefined && options.maxThinkingTokens > 0) {
       claudeOptions.maxThinkingTokens = options.maxThinkingTokens;
     }
 

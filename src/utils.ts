@@ -55,8 +55,8 @@ export function validateOptions(options?: ClaudeCodeAgentOptions): Required<Clau
     model: 'claude-sonnet-4-5',
     fallbackModel: 'claude-haiku-3-5',
     systemPrompt: '',
-    thinking: undefined as unknown as ThinkingConfig,
-    effort: undefined as unknown as 'low' | 'medium' | 'high' | 'max',
+    thinking: undefined!,
+    effort: undefined!,
     maxThinkingTokens: 0,
     mcpServers: {},
     settingSources: []
