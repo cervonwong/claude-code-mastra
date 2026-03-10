@@ -15,7 +15,7 @@ describe('Core Integration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'basic-test-agent',
         instructions: 'You are a helpful assistant. Always respond concisely.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 1,
           timeout: 15000
@@ -37,7 +37,7 @@ describe('Core Integration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'streaming-test-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 1,
           timeout: 15000
@@ -72,7 +72,7 @@ describe('Core Integration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'session-test-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 1,
           timeout: 15000
@@ -110,7 +110,7 @@ describe('Core Integration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'config-test-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 1,
           permissionMode: 'default',

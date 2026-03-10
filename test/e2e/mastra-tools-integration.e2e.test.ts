@@ -40,7 +40,7 @@ describe('Mastra Tools Integration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'calculator-agent',
         instructions: 'You are a helpful assistant with access to a calculator tool. Use it for any mathematical calculations.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           calculator: calculatorTool
         },
@@ -107,7 +107,7 @@ describe('Mastra Tools Integration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'user-creation-agent',
         instructions: 'You are a helpful assistant that can create users. Always use the createUser tool when asked to create a user.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           createUser: userTool
         },
@@ -173,7 +173,7 @@ describe('Mastra Tools Integration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'multi-tool-agent',
         instructions: 'You are a helpful assistant with access to weather and time tools.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           getWeather: weatherTool,
           getCurrentTime: timeTool
@@ -232,7 +232,7 @@ describe('Mastra Tools Integration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'error-handling-agent',
         instructions: 'You are a helpful assistant. Use the errorTool when requested.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           errorTool: errorTool
         },
@@ -293,7 +293,7 @@ describe('Mastra Tools Integration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'format-test-agent',
         instructions: 'You are a helpful assistant. Use the simpleTool when requested.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           simpleTool: simpleTool
         },

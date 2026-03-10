@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ClaudeCodeAgent } from '../../src/claude-code-agent.js';
 import { z } from 'zod';
-import type { SDKMessage } from '@anthropic-ai/claude-code';
+import type { SDKMessage } from '@anthropic-ai/claude-agent-sdk';
 import { createTool } from '@mastra/core/tools';
-import * as claudeCodeModule from '@anthropic-ai/claude-code';
+import * as claudeCodeModule from '@anthropic-ai/claude-agent-sdk';
 
 // Claude Code SDKをモック
-vi.mock('@anthropic-ai/claude-code', () => ({
+vi.mock('@anthropic-ai/claude-agent-sdk', () => ({
   query: vi.fn()
 }));
 
@@ -47,7 +47,7 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           testTool: mockTool
         }
@@ -75,7 +75,7 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           tool1,
           tool2
@@ -92,7 +92,7 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022'
+        model: 'claude-sonnet-4-5'
       });
 
       const tools = agent.getTools();
@@ -115,7 +115,7 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           testTool
         }
@@ -148,7 +148,7 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           strictTool
         }
@@ -170,7 +170,7 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {}
       });
 
@@ -197,7 +197,7 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           describedTool1,
           describedTool2
@@ -233,7 +233,7 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           alpha,
           beta,
@@ -262,12 +262,12 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           searchTool
         },
         claudeCodeOptions: {
-          appendSystemPrompt: 'Always use tools when appropriate.'
+          systemPrompt: 'Always use tools when appropriate.'
         }
       });
 
@@ -284,14 +284,14 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       expect(mockQuery).toHaveBeenCalledWith({
         prompt: 'Search for TypeScript tutorials',
         options: expect.objectContaining({
-          appendSystemPrompt: expect.stringContaining('Always use tools when appropriate.')
+          systemPrompt: expect.stringContaining('Always use tools when appropriate.')
         })
       });
       
       // システムプロンプトにツール情報が含まれることを確認
       const callArgs = mockQuery.mock.calls[0][0];
-      expect(callArgs.options.appendSystemPrompt).toContain('## Available Tools');
-      expect(callArgs.options.appendSystemPrompt).toContain('searchTool: Search for information');
+      expect(callArgs.options.systemPrompt).toContain('IMPORTANT');
+      expect(callArgs.options.systemPrompt).toContain('searchTool: Search for information');
     });
   });
 
@@ -300,7 +300,7 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {}
       });
 
@@ -346,7 +346,7 @@ describe('ClaudeCodeAgent - Mastra Agent Tools', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           toolToRemove,
           toolToKeep

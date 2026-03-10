@@ -15,7 +15,7 @@ describe('Tools Restriction E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'read-only-agent',
         instructions: 'You are a helpful assistant that can read files.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 2,
           allowedTools: ['Read'],
@@ -49,7 +49,7 @@ describe('Tools Restriction E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'restricted-agent',
         instructions: 'You are a helpful assistant with limited tools.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 2,
           allowedTools: ['Read'], // Writeは許可されていない
@@ -89,7 +89,7 @@ describe('Tools Restriction E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'no-write-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 2,
           disallowedTools: ['Write', 'Edit'], // Write/Editを禁止
@@ -126,7 +126,7 @@ describe('Tools Restriction E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'read-allowed-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 2,
           disallowedTools: ['Write'], // Writeのみ禁止、Readは許可
@@ -163,7 +163,7 @@ describe('Tools Restriction E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'combined-restrictions-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 2,
           allowedTools: ['Read', 'LS'], // ReadとLSのみ許可

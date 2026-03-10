@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MessageConverter } from '../../src/message-converter.js';
-import type { SDKMessage } from '@anthropic-ai/claude-code';
+import type { SDKMessage } from '@anthropic-ai/claude-agent-sdk';
 
 describe('MessageConverter', () => {
   let converter: MessageConverter;
@@ -109,8 +109,8 @@ describe('MessageConverter', () => {
       );
 
       expect(result.content).toContain('Text content');
-      expect(result.content).toContain('[Tool: TestTool]');
-      expect(result.content).toContain('[Tool Result: Tool executed]');
+      // tool_use blocks are excluded from content, tool_result content is included
+      expect(result.content).toContain('Tool executed');
     });
 
     it('should use result message when no assistant messages', () => {
@@ -239,9 +239,15 @@ describe('MessageConverter', () => {
         session_id: 'system-session',
         tools: ['Edit', 'Read', 'Write'],
         mcp_servers: [],
-        model: 'claude-3-5-sonnet-20241022',
-        permissionMode: 'default'
-      };
+        model: 'claude-sonnet-4-5',
+        permissionMode: 'default',
+        claude_code_version: '2.1.72',
+        slash_commands: [],
+        output_style: 'default',
+        skills: [],
+        plugins: [],
+        uuid: '00000000-0000-0000-0000-000000000000' as `${string}-${string}-${string}-${string}-${string}`
+      } as SDKMessage;
 
       const chunk = converter.convertSDKMessageToStreamChunk(message);
 
@@ -249,7 +255,7 @@ describe('MessageConverter', () => {
       expect(chunk.data.systemInfo).toEqual({
         cwd: '/test/directory',
         tools: ['Edit', 'Read', 'Write'],
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         permissionMode: 'default'
       });
       expect(chunk.data.sessionId).toBe('system-session');

@@ -20,7 +20,7 @@ Claude CodeのTypeScript SDKを使用して、Mastraフレームワーク内でC
 ## インストール
 
 ```bash
-npm install @anthropic-ai/claude-code @mastra/core
+npm install @anthropic-ai/claude-agent-sdk @mastra/core
 ```
 
 ## 基本的な使用方法
@@ -172,7 +172,7 @@ const weatherTool: ToolAction = {
 const agent = new ClaudeCodeAgent({
   name: 'weather-agent',
   instructions: 'You are a weather assistant with access to weather data.',
-  model: 'claude-3-5-sonnet-20241022',
+  model: 'claude-sonnet-4-5',
   tools: {
     getWeather: weatherTool
   }
@@ -260,7 +260,7 @@ if (sessionInfo) {
 
 - Node.js 18+
 - TypeScript 4.9+
-- `@anthropic-ai/claude-code` ^1.0.35
+- `@anthropic-ai/claude-agent-sdk` ^0.2.72
 - `@mastra/core` ^0.10.8
 
 ## 認証

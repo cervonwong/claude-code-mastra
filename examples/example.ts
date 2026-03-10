@@ -7,7 +7,7 @@ async function basicUsageExample() {
   const agent = new ClaudeCodeAgent({
     name: 'claude-code-agent',
     instructions: 'You are a helpful coding assistant using Claude Code.',
-    model: 'claude-3-5-sonnet-20241022',
+    model: 'claude-sonnet-4-5',
     claudeCodeOptions: {
       maxTurns: 3,
       permissionMode: 'default',
@@ -36,7 +36,7 @@ async function streamingExample() {
   const agent = new ClaudeCodeAgent({
     name: 'claude-code-streaming-agent',
     instructions: 'You are a helpful coding assistant.',
-    model: 'claude-3-5-sonnet-20241022',
+    model: 'claude-sonnet-4-5',
     claudeCodeOptions: {
       maxTurns: 2,
       permissionMode: 'acceptEdits'
@@ -70,7 +70,7 @@ async function sessionManagementExample() {
   const agent = new ClaudeCodeAgent({
     name: 'session-demo-agent',
     instructions: 'You are a helpful assistant.',
-    model: 'claude-3-5-sonnet-20241022'
+    model: 'claude-sonnet-4-5'
   });
 
   console.log('Active sessions before:', agent.getAllActiveSessions().length);
@@ -94,7 +94,7 @@ async function errorHandlingExample() {
   const agent = new ClaudeCodeAgent({
     name: 'error-demo-agent',
     instructions: 'You are a helpful assistant.',
-    model: 'claude-3-5-sonnet-20241022',
+    model: 'claude-sonnet-4-5',
     claudeCodeOptions: {
       maxTurns: 1,
       timeout: 1000 // Very short timeout to trigger error
@@ -123,7 +123,7 @@ async function configurationExample() {
   const agent = new ClaudeCodeAgent({
     name: 'config-demo-agent',
     instructions: 'You are a helpful assistant.',
-    model: 'claude-3-5-sonnet-20241022'
+    model: 'claude-sonnet-4-5'
   });
   
   console.log('Default Claude Code options:', agent.getClaudeCodeOptions());

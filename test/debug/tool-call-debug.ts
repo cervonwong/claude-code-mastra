@@ -22,7 +22,7 @@ async function debugToolCalls() {
   const agent = new ClaudeCodeAgent({
     name: 'debug-agent',
     instructions: 'You are a test agent with access to an echo tool.',
-    model: 'claude-3-5-sonnet-20241022',
+    model: 'claude-sonnet-4-5',
     tools: {
       echo: echoTool
     },

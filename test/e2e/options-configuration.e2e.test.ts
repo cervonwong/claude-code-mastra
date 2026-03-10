@@ -15,7 +15,7 @@ describe('Options Configuration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'max-turns-test-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 1, // 1ターンのみ許可
           timeout: 15000
@@ -41,7 +41,7 @@ describe('Options Configuration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'multi-turns-test-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 3, // 3ターンまで許可
           timeout: 25000
@@ -67,7 +67,7 @@ describe('Options Configuration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'default-permission-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 2,
           permissionMode: 'default',
@@ -102,7 +102,7 @@ describe('Options Configuration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'accept-edits-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 2,
           permissionMode: 'acceptEdits',
@@ -139,7 +139,7 @@ describe('Options Configuration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'timeout-test-agent',
         instructions: 'You are a helpful assistant. Always respond concisely.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 1,
           timeout: 10000 // 10秒のタイムアウト
@@ -172,7 +172,7 @@ describe('Options Configuration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'model-test-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022', // 明示的にモデルを指定
+        model: 'claude-sonnet-4-5', // 明示的にモデルを指定
         claudeCodeOptions: {
           maxTurns: 1,
           timeout: 15000
@@ -202,7 +202,7 @@ describe('Options Configuration E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'dynamic-config-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 1,
           permissionMode: 'default',

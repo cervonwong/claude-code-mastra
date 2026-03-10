@@ -12,7 +12,10 @@ export type {
   McpStdioServerConfig,
   McpSSEServerConfig,
   McpHttpServerConfig,
-  ToolsInput
+  ToolsInput,
+  SystemPromptConfig,
+  ThinkingConfig,
+  SettingSource
 } from './types.js';
 
 // Mastra Coreの型を再エクスポート（便利のため）

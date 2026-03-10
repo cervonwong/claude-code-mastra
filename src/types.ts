@@ -2,26 +2,51 @@ import type { ToolAction } from '@mastra/core';
 
 export type ToolsInput = Record<string, ToolAction<any, any, any>>;
 
+/**
+ * Thinking configuration for extended thinking behavior.
+ */
+export type ThinkingConfig =
+  | { type: 'adaptive' }
+  | { type: 'enabled'; budgetTokens: number }
+  | { type: 'disabled' };
+
+/**
+ * System prompt configuration.
+ * - `string` - Use a custom system prompt
+ * - `{ type: 'preset', preset: 'claude_code', append?: string }` - Use Claude Code's default system prompt with optional appended instructions
+ */
+export type SystemPromptConfig = string | { type: 'preset'; preset: 'claude_code'; append?: string };
+
+/**
+ * Setting source for controlling which filesystem settings to load.
+ */
+export type SettingSource = 'user' | 'project' | 'local';
+
 export interface ClaudeCodeAgentOptions {
   maxTurns?: number;
   allowedTools?: string[];
   disallowedTools?: string[];
-  permissionMode?: 'default' | 'acceptEdits' | 'bypassPermissions' | 'plan';
+  permissionMode?: 'default' | 'acceptEdits' | 'bypassPermissions' | 'plan' | 'dontAsk';
   cwd?: string;
   timeout?: number;
   model?: string;
   fallbackModel?: string;
-  appendSystemPrompt?: string;
-  customSystemPrompt?: string;
+  systemPrompt?: SystemPromptConfig;
+  thinking?: ThinkingConfig;
+  effort?: 'low' | 'medium' | 'high' | 'max';
+  /**
+   * @deprecated Use `thinking` instead.
+   */
   maxThinkingTokens?: number;
   mcpServers?: Record<string, McpServerConfig>;
+  settingSources?: SettingSource[];
 }
 
-// Claude Code SDKのMCPサーバー設定型を再定義
+// Claude Agent SDKのMCPサーバー設定型を再定義
 export type McpServerConfig = McpStdioServerConfig | McpSSEServerConfig | McpHttpServerConfig;
 
 export interface McpStdioServerConfig {
-  type: 'stdio';
+  type?: 'stdio';
   command: string;
   args?: string[];
   env?: Record<string, string>;

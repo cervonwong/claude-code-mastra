@@ -17,7 +17,7 @@ describe('Error Handling E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'timeout-test-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 1,
           timeout: 5000 // 5秒の短いタイムアウト（ただし合理的）
@@ -57,7 +57,7 @@ describe('Error Handling E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'invalid-tool-test-agent',
         instructions: 'You are a helpful assistant with limited tools.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           existingTool: simpleTool
         },
@@ -111,7 +111,7 @@ describe('Error Handling E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'faulty-tool-test-agent',
         instructions: 'You are a helpful assistant. Use the faultyTool when requested.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           faultyTool: faultyTool
         },
@@ -176,7 +176,7 @@ describe('Error Handling E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'validation-test-agent',
         instructions: 'You are a helpful assistant. Use the strictTool when requested.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         tools: {
           strictTool: strictTool
         },
@@ -214,7 +214,7 @@ describe('Error Handling E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'sdk-error-test-agent',
         instructions: 'You are a helpful assistant.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 1,
           timeout: 10000
@@ -247,7 +247,7 @@ describe('Error Handling E2E Tests', () => {
       const agent = new ClaudeCodeAgent({
         name: 'concurrent-test-agent',
         instructions: 'You are a helpful assistant. Always respond concisely.',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 1,
           timeout: 15000

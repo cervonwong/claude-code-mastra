@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ClaudeCodeAgent } from '../../src/claude-code-agent.js';
-import type { SDKMessage, Options } from '@anthropic-ai/claude-code';
+import type { SDKMessage, Options } from '@anthropic-ai/claude-agent-sdk';
 
 // Claude Code SDKをモック
-vi.mock('@anthropic-ai/claude-code', () => ({
+vi.mock('@anthropic-ai/claude-agent-sdk', () => ({
   query: vi.fn()
 }));
 
@@ -17,7 +17,7 @@ vi.mock('@mastra/core', () => ({
   }
 }));
 
-const { query } = await import('@anthropic-ai/claude-code');
+const { query } = await import('@anthropic-ai/claude-agent-sdk');
 const mockQuery = vi.mocked(query);
 
 describe('ClaudeCodeAgent - Tools Restriction', () => {
@@ -34,7 +34,7 @@ describe('ClaudeCodeAgent - Tools Restriction', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           allowedTools: ['Edit', 'Read', 'Write']
         }
@@ -75,7 +75,7 @@ describe('ClaudeCodeAgent - Tools Restriction', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           allowedTools: []
         }
@@ -103,7 +103,7 @@ describe('ClaudeCodeAgent - Tools Restriction', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           allowedTools: ['Edit']
         }
@@ -137,7 +137,7 @@ describe('ClaudeCodeAgent - Tools Restriction', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           disallowedTools: ['Bash', 'WebFetch']
         }
@@ -176,7 +176,7 @@ describe('ClaudeCodeAgent - Tools Restriction', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           disallowedTools: []
         }
@@ -205,7 +205,7 @@ describe('ClaudeCodeAgent - Tools Restriction', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           allowedTools: ['Edit', 'Read', 'Write'],
           disallowedTools: ['Bash', 'WebFetch']
@@ -236,7 +236,7 @@ describe('ClaudeCodeAgent - Tools Restriction', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           allowedTools: ['Edit', 'Read']
         }
@@ -280,7 +280,7 @@ describe('ClaudeCodeAgent - Tools Restriction', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           disallowedTools: ['Bash']
         }
@@ -314,7 +314,7 @@ describe('ClaudeCodeAgent - Tools Restriction', () => {
       const agent = new ClaudeCodeAgent({
         name: 'test-agent',
         instructions: 'Test instructions',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-5',
         claudeCodeOptions: {
           maxTurns: 5,
           allowedTools: ['Edit', 'Read', 'Write'],

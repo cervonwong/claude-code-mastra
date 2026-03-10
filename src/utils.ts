@@ -1,4 +1,4 @@
-import type { ClaudeCodeAgentOptions, SessionInfo, McpServerConfig } from './types.js';
+import type { ClaudeCodeAgentOptions, SessionInfo, McpServerConfig, SystemPromptConfig, ThinkingConfig, SettingSource } from './types.js';
 
 export class SessionManager {
   private sessions = new Map<string, SessionInfo>();
@@ -52,12 +52,14 @@ export function validateOptions(options?: ClaudeCodeAgentOptions): Required<Clau
     permissionMode: 'default',
     cwd: process.cwd(),
     timeout: 300000, // 5 minutes
-    model: 'claude-3-5-sonnet-20241022',
-    fallbackModel: 'claude-3-5-haiku-20241022',
-    appendSystemPrompt: '',
-    customSystemPrompt: '',
+    model: 'claude-sonnet-4-5',
+    fallbackModel: 'claude-haiku-3-5',
+    systemPrompt: '',
+    thinking: undefined as unknown as ThinkingConfig,
+    effort: undefined as unknown as 'low' | 'medium' | 'high' | 'max',
     maxThinkingTokens: 0,
-    mcpServers: {}
+    mcpServers: {},
+    settingSources: []
   };
 
   if (!options) {
@@ -73,10 +75,12 @@ export function validateOptions(options?: ClaudeCodeAgentOptions): Required<Clau
     timeout: validateTimeout(options.timeout) ?? defaultOptions.timeout,
     model: options.model ?? defaultOptions.model,
     fallbackModel: options.fallbackModel ?? defaultOptions.fallbackModel,
-    appendSystemPrompt: options.appendSystemPrompt ?? defaultOptions.appendSystemPrompt,
-    customSystemPrompt: options.customSystemPrompt ?? defaultOptions.customSystemPrompt,
+    systemPrompt: validateSystemPrompt(options.systemPrompt) ?? defaultOptions.systemPrompt,
+    thinking: options.thinking ?? defaultOptions.thinking,
+    effort: validateEffort(options.effort) ?? defaultOptions.effort,
     maxThinkingTokens: options.maxThinkingTokens ?? defaultOptions.maxThinkingTokens,
-    mcpServers: validateMCPServers(options.mcpServers) ?? defaultOptions.mcpServers
+    mcpServers: validateMCPServers(options.mcpServers) ?? defaultOptions.mcpServers,
+    settingSources: validateSettingSources(options.settingSources) ?? defaultOptions.settingSources
   };
 }
 
@@ -96,13 +100,13 @@ function validateAllowedTools(allowedTools?: string[]): string[] | undefined {
   return allowedTools.filter(tool => typeof tool === 'string');
 }
 
-function validatePermissionMode(permissionMode?: string): 'default' | 'acceptEdits' | 'bypassPermissions' | 'plan' | undefined {
+function validatePermissionMode(permissionMode?: string): 'default' | 'acceptEdits' | 'bypassPermissions' | 'plan' | 'dontAsk' | undefined {
   if (permissionMode === undefined) return undefined;
-  const validModes = ['default', 'acceptEdits', 'bypassPermissions', 'plan'] as const;
+  const validModes = ['default', 'acceptEdits', 'bypassPermissions', 'plan', 'dontAsk'] as const;
   if (!validModes.includes(permissionMode as any)) {
     throw new Error(`permissionMode must be one of: ${validModes.join(', ')}`);
   }
-  return permissionMode as 'default' | 'acceptEdits' | 'bypassPermissions' | 'plan';
+  return permissionMode as 'default' | 'acceptEdits' | 'bypassPermissions' | 'plan' | 'dontAsk';
 }
 
 function validateWorkingDirectory(workingDirectory?: string): string | undefined {
@@ -121,6 +125,41 @@ function validateTimeout(timeout?: number): number | undefined {
   return timeout;
 }
 
+function validateSystemPrompt(systemPrompt?: SystemPromptConfig): SystemPromptConfig | undefined {
+  if (systemPrompt === undefined) return undefined;
+  if (typeof systemPrompt === 'string') return systemPrompt;
+  if (typeof systemPrompt === 'object' && systemPrompt !== null) {
+    if (systemPrompt.type === 'preset' && systemPrompt.preset === 'claude_code') {
+      return systemPrompt;
+    }
+    throw new Error('systemPrompt object must have type: "preset" and preset: "claude_code"');
+  }
+  throw new Error('systemPrompt must be a string or a preset configuration object');
+}
+
+function validateEffort(effort?: string): 'low' | 'medium' | 'high' | 'max' | undefined {
+  if (effort === undefined) return undefined;
+  const validEfforts = ['low', 'medium', 'high', 'max'] as const;
+  if (!validEfforts.includes(effort as any)) {
+    throw new Error(`effort must be one of: ${validEfforts.join(', ')}`);
+  }
+  return effort as 'low' | 'medium' | 'high' | 'max';
+}
+
+function validateSettingSources(settingSources?: SettingSource[]): SettingSource[] | undefined {
+  if (settingSources === undefined) return undefined;
+  if (!Array.isArray(settingSources)) {
+    throw new Error('settingSources must be an array');
+  }
+  const validSources = ['user', 'project', 'local'] as const;
+  for (const source of settingSources) {
+    if (!validSources.includes(source as any)) {
+      throw new Error(`settingSources must contain only: ${validSources.join(', ')}`);
+    }
+  }
+  return settingSources;
+}
+
 function validateMCPServers(mcpServers?: Record<string, McpServerConfig>): Record<string, McpServerConfig> | undefined {
   if (mcpServers === undefined) return undefined;
   
@@ -134,28 +173,37 @@ function validateMCPServers(mcpServers?: Record<string, McpServerConfig>): Recor
       throw new Error(`mcpServers.${serverName} must be an object`);
     }
     
-    if (!serverConfig.type || !['stdio', 'sse', 'http'].includes(serverConfig.type)) {
+    const config = serverConfig as Record<string, any>;
+    
+    if (config.type && !['stdio', 'sse', 'http'].includes(config.type)) {
       throw new Error(`mcpServers.${serverName}.type must be one of: stdio, sse, http`);
     }
     
-    if (serverConfig.type === 'stdio') {
-      if (!serverConfig.command || typeof serverConfig.command !== 'string') {
+    // Determine the effective type: default to 'stdio' when type is omitted but command is present
+    const effectiveType = config.type || ('command' in config ? 'stdio' : undefined);
+    
+    if (!effectiveType) {
+      throw new Error(`mcpServers.${serverName} must have a type or a command field`);
+    }
+    
+    if (effectiveType === 'stdio') {
+      if (!config.command || typeof config.command !== 'string') {
         throw new Error(`mcpServers.${serverName}.command must be a string`);
       }
       
-      if (serverConfig.args && !Array.isArray(serverConfig.args)) {
+      if (config.args && !Array.isArray(config.args)) {
         throw new Error(`mcpServers.${serverName}.args must be an array`);
       }
       
-      if (serverConfig.env && typeof serverConfig.env !== 'object') {
+      if (config.env && typeof config.env !== 'object') {
         throw new Error(`mcpServers.${serverName}.env must be an object`);
       }
-    } else if (serverConfig.type === 'sse' || serverConfig.type === 'http') {
-      if (!serverConfig.url || typeof serverConfig.url !== 'string') {
+    } else if (effectiveType === 'sse' || effectiveType === 'http') {
+      if (!config.url || typeof config.url !== 'string') {
         throw new Error(`mcpServers.${serverName}.url must be a string`);
       }
       
-      if (serverConfig.headers && typeof serverConfig.headers !== 'object') {
+      if (config.headers && typeof config.headers !== 'object') {
         throw new Error(`mcpServers.${serverName}.headers must be an object`);
       }
     }

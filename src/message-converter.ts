@@ -3,7 +3,7 @@ import type {
   MastraStreamChunk,
   ErrorDetails
 } from './types.js';
-import type { SDKMessage } from '@anthropic-ai/claude-code';
+import type { SDKMessage } from '@anthropic-ai/claude-agent-sdk';
 
 export class MessageConverter {
   /**
@@ -129,15 +129,25 @@ export class MessageConverter {
         };
 
       case 'system':
+        // Handle different system message subtypes in new SDK
+        if ('subtype' in message && message.subtype === 'init') {
+          return {
+            type: 'metadata',
+            data: {
+              systemInfo: {
+                cwd: (message as any).cwd,
+                tools: (message as any).tools,
+                model: (message as any).model,
+                permissionMode: (message as any).permissionMode
+              },
+              sessionId: message.session_id
+            }
+          };
+        }
         return {
           type: 'metadata',
           data: {
-            systemInfo: {
-              cwd: message.cwd,
-              tools: message.tools,
-              model: message.model,
-              permissionMode: message.permissionMode
-            },
+            subtype: 'subtype' in message ? message.subtype : undefined,
             sessionId: message.session_id
           }
         };

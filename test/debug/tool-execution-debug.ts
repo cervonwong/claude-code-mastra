@@ -37,7 +37,7 @@ async function debugToolExecution() {
   const agent = new ClaudeCodeAgent({
     name: 'debug-agent',
     instructions: 'You are a helpful assistant with access to calculator and time tools.',
-    model: 'claude-3-5-sonnet-20241022',
+    model: 'claude-sonnet-4-5',
     tools: testTools,
     claudeCodeOptions: {
       maxTurns: 2,

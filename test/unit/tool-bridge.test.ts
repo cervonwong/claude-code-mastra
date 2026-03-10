@@ -28,7 +28,7 @@ describe('ToolBridge', () => {
       const bridge = new ToolBridge(tools);
       const prompt = bridge.generateSystemPrompt();
 
-      expect(prompt).toContain('## Available Tools');
+      expect(prompt).toContain('Available tools:');
       expect(prompt).toContain('calculator: Perform calculations');
       expect(prompt).toContain('weather: Get weather information [Parameters: city: string, unit: optional (optional)]');
       expect(prompt).toContain('```json');

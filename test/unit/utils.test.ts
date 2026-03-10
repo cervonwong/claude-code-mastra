@@ -118,8 +118,8 @@ describe('validateOptions', () => {
     expect(options.permissionMode).toBe('default');
     expect(options.cwd).toBe(process.cwd());
     expect(options.timeout).toBe(300000);
-    expect(options.model).toBe('claude-3-5-sonnet-20241022');
-    expect(options.fallbackModel).toBe('claude-3-5-haiku-20241022');
+    expect(options.model).toBe('claude-sonnet-4-5');
+    expect(options.fallbackModel).toBe('claude-haiku-3-5');
   });
 
   it('should merge provided options with defaults', () => {
@@ -299,8 +299,7 @@ describe('integration tests for utils', () => {
       timeout: 120000,
       model: 'claude-3-opus-20240229',
       fallbackModel: 'claude-3-sonnet-20240229',
-      appendSystemPrompt: 'Additional instructions',
-      customSystemPrompt: 'Custom system message',
+      systemPrompt: 'Custom system message',
       maxThinkingTokens: 1000
     };
 
@@ -314,8 +313,7 @@ describe('integration tests for utils', () => {
     expect(validated.timeout).toBe(120000);
     expect(validated.model).toBe('claude-3-opus-20240229');
     expect(validated.fallbackModel).toBe('claude-3-sonnet-20240229');
-    expect(validated.appendSystemPrompt).toBe('Additional instructions');
-    expect(validated.customSystemPrompt).toBe('Custom system message');
+    expect(validated.systemPrompt).toBe('Custom system message');
     expect(validated.maxThinkingTokens).toBe(1000);
   });
 });

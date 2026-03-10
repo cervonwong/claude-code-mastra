@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ClaudeCodeAgent } from '../../src/claude-code-agent.js';
-import type { SDKMessage } from '@anthropic-ai/claude-code';
+import type { SDKMessage } from '@anthropic-ai/claude-agent-sdk';
 
 // Claude Code SDKをモック
-vi.mock('@anthropic-ai/claude-code', () => ({
+vi.mock('@anthropic-ai/claude-agent-sdk', () => ({
   query: vi.fn()
 }));
 
@@ -17,7 +17,7 @@ vi.mock('@mastra/core', () => ({
   }
 }));
 
-const { query } = await import('@anthropic-ai/claude-code');
+const { query } = await import('@anthropic-ai/claude-agent-sdk');
 const mockQuery = vi.mocked(query);
 
 describe('ClaudeCodeAgent', () => {
@@ -28,7 +28,7 @@ describe('ClaudeCodeAgent', () => {
     agent = new ClaudeCodeAgent({
       name: 'test-agent',
       instructions: 'Test instructions',
-      model: 'claude-3-5-sonnet-20241022',
+      model: 'claude-sonnet-4-5',
       claudeCodeOptions: {
         maxTurns: 3,
         permissionMode: 'default',
@@ -46,7 +46,7 @@ describe('ClaudeCodeAgent', () => {
       const defaultAgent = new ClaudeCodeAgent({
         name: 'default-agent',
         instructions: 'Default instructions',
-        model: 'claude-3-5-sonnet-20241022'
+        model: 'claude-sonnet-4-5'
       });
       
       expect(defaultAgent).toBeInstanceOf(ClaudeCodeAgent);

@@ -1,4 +1,4 @@
-import { query, type Options, type SDKMessage } from '@anthropic-ai/claude-code';
+import { query, type Options, type SDKMessage } from '@anthropic-ai/claude-agent-sdk';
 import { Agent } from '@mastra/core';
 import type { ToolAction } from '@mastra/core';
 import { z } from 'zod';
@@ -54,15 +54,24 @@ export class ClaudeCodeAgent extends Agent {
     
     // Mastraツールがある場合は、Claude Code内蔵ツールを無効化し、Mastraツールのみを使用
     const toolsSystemPrompt = this.toolBridge.generateSystemPrompt();
-    if (toolsSystemPrompt && !mergedOptions.customSystemPrompt) {
+    if (toolsSystemPrompt) {
       // Claude Code内蔵ツールを無効化
       mergedOptions.disallowedTools = ['Task', 'Bash', 'Read', 'Write', 'Edit', 'LS', 'Glob', 'Grep'];
       
-      mergedOptions.appendSystemPrompt = mergedOptions.appendSystemPrompt 
-        ? `${mergedOptions.appendSystemPrompt}\n\n${toolsSystemPrompt}`
-        : toolsSystemPrompt;
+      if (!mergedOptions.systemPrompt) {
+        mergedOptions.systemPrompt = toolsSystemPrompt;
+      } else if (typeof mergedOptions.systemPrompt === 'string') {
+        mergedOptions.systemPrompt = `${mergedOptions.systemPrompt}\n\n${toolsSystemPrompt}`;
+      } else if (mergedOptions.systemPrompt?.type === 'preset') {
+        const existingAppend = mergedOptions.systemPrompt.append || '';
+        mergedOptions.systemPrompt = {
+          type: 'preset',
+          preset: 'claude_code',
+          append: existingAppend ? `${existingAppend}\n\n${toolsSystemPrompt}` : toolsSystemPrompt
+        };
+      }
     }
-    
+
     try {
       const claudeOptions = this.createClaudeCodeOptions(mergedOptions);
       const sdkMessages: SDKMessage[] = [];
@@ -198,13 +207,22 @@ export class ClaudeCodeAgent extends Agent {
     
     // Mastraツールがある場合は、Claude Code内蔵ツールを無効化し、Mastraツールのみを使用
     const toolsSystemPrompt = this.toolBridge.generateSystemPrompt();
-    if (toolsSystemPrompt && !mergedOptions.customSystemPrompt) {
+    if (toolsSystemPrompt) {
       // Claude Code内蔵ツールを無効化
       mergedOptions.disallowedTools = ['Task', 'Bash', 'Read', 'Write', 'Edit', 'LS', 'Glob', 'Grep'];
       
-      mergedOptions.appendSystemPrompt = mergedOptions.appendSystemPrompt 
-        ? `${mergedOptions.appendSystemPrompt}\n\n${toolsSystemPrompt}`
-        : toolsSystemPrompt;
+      if (!mergedOptions.systemPrompt) {
+        mergedOptions.systemPrompt = toolsSystemPrompt;
+      } else if (typeof mergedOptions.systemPrompt === 'string') {
+        mergedOptions.systemPrompt = `${mergedOptions.systemPrompt}\n\n${toolsSystemPrompt}`;
+      } else if (mergedOptions.systemPrompt?.type === 'preset') {
+        const existingAppend = mergedOptions.systemPrompt.append || '';
+        mergedOptions.systemPrompt = {
+          type: 'preset',
+          preset: 'claude_code',
+          append: existingAppend ? `${existingAppend}\n\n${toolsSystemPrompt}` : toolsSystemPrompt
+        };
+      }
     }
     
     const chunks: MastraStreamChunk[] = [];
@@ -353,20 +371,26 @@ export class ClaudeCodeAgent extends Agent {
       claudeOptions.fallbackModel = options.fallbackModel;
     }
 
-    if (options.appendSystemPrompt) {
-      claudeOptions.appendSystemPrompt = options.appendSystemPrompt;
+    if (options.systemPrompt) {
+      claudeOptions.systemPrompt = options.systemPrompt;
     }
 
-    if (options.customSystemPrompt) {
-      claudeOptions.customSystemPrompt = options.customSystemPrompt;
-    }
-
-    if (options.maxThinkingTokens > 0) {
+    if (options.thinking) {
+      claudeOptions.thinking = options.thinking;
+    } else if (options.maxThinkingTokens > 0) {
       claudeOptions.maxThinkingTokens = options.maxThinkingTokens;
+    }
+
+    if (options.effort) {
+      claudeOptions.effort = options.effort;
     }
 
     if (options.mcpServers) {
       claudeOptions.mcpServers = options.mcpServers;
+    }
+
+    if (options.settingSources && options.settingSources.length > 0) {
+      claudeOptions.settingSources = options.settingSources;
     }
 
     return claudeOptions;
